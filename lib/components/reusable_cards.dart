@@ -1,3 +1,4 @@
+import 'package:evaluation_task/user_products.dart';
 import 'package:flutter/material.dart';
 import '../constants.dart';
 import 'bottomSheet_popup.dart';
@@ -6,7 +7,8 @@ class ReusableCards extends StatelessWidget {
   final String src;
   final String name;
   final price;
-  ReusableCards({this.src, this.name, this.price});
+  var productData;
+  ReusableCards({this.src, this.name, this.price, this.productData});
 
   @override
   Widget build(BuildContext context) {
@@ -39,21 +41,10 @@ class ReusableCards extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () {
-                // showModalBottomSheet(
-                //   context: context,
-                //   //isScrollControlled: true,
-                //   builder: (context) => SingleChildScrollView(
-                //     child: Container(
-                //       padding: EdgeInsets.only(
-                //           bottom:
-                //               MediaQuery.of(context).viewInsets.bottom),
-                //       child: BottomSheetPage(),
-                //     ),
-                //   ),
-                // );
                 showModalBottomSheet(
                   context: context,
-                  builder: (context) => BottomSheetPage(price: price),
+                  builder: (context) =>
+                      BottomSheetPage(price: price, src: src, name: name),
                 );
               },
               child: Container(

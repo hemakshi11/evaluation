@@ -3,6 +3,7 @@ import 'package:evaluation_task/screens/login_screen.dart';
 import 'package:evaluation_task/screens/product_screen.dart';
 import 'package:evaluation_task/screens/register_screen.dart';
 import 'package:evaluation_task/screens/welcome_screen.dart';
+import 'package:evaluation_task/user_product_details.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (content) => ProductData(),
+      create: (context) => Users(),
       child: MaterialApp(
         theme: ThemeData.dark(),
         initialRoute: WelcomeScreen.id,

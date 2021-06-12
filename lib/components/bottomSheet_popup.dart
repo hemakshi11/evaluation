@@ -1,11 +1,16 @@
 import 'package:evaluation_task/constants.dart';
+import 'package:evaluation_task/user_product_details.dart';
+import 'package:evaluation_task/user_products.dart';
 import 'package:flutter/material.dart';
 import 'subscription_buttons.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:provider/provider.dart';
 
 class BottomSheetPage extends StatefulWidget {
   final price;
-  BottomSheetPage({this.price});
+  String name;
+  String src;
+  BottomSheetPage({this.price, this.name, this.src});
   @override
   _BottomSheetPageState createState() => _BottomSheetPageState();
 }
@@ -38,10 +43,20 @@ class _BottomSheetPageState extends State<BottomSheetPage> {
               height: 20,
             ),
             SubscriptionButtons(
-                text: '12 months', price: widget.price['12months']),
+                text: '12 months',
+                price: widget.price['12months'],
+                onTap: () {
+                  Provider.of<Users>(context, listen: false).addProduct(
+                      widget.name, widget.src, widget.price['12months']);
+                }),
             SizedBox(height: 10),
             SubscriptionButtons(
-                text: '6 months', price: widget.price['6months']),
+                text: '6 months',
+                price: widget.price['6months'],
+                onTap: () {
+                  Provider.of<Users>(context, listen: false).addProduct(
+                      widget.name, widget.src, widget.price['6months']);
+                }),
           ],
         ),
       ),

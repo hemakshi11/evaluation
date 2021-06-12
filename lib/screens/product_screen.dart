@@ -4,21 +4,15 @@ import 'package:evaluation_task/components/reusable_cards.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:evaluation_task/user_product_details.dart';
 
 import '../product_data.dart';
+import '../user_product_details.dart';
 
 class ProductScreen extends StatelessWidget {
   static String id = 'productScreen';
 
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  // final CollectionReference _userRef =
-  //     FirebaseFirestore.instance.collection('users');
-  // User _user= FirebaseAuth.instance.currentUser;
-  //
-  // void addToCart() {
-  //   return _userRef.doc(_user.uid).collection('cart').
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +31,7 @@ class ProductScreen extends StatelessWidget {
           Container(
             child: Center(
               child: Text(
-                '6',
+                Provider.of<Users>(context).productCount.toString(),
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -53,47 +47,6 @@ class ProductScreen extends StatelessWidget {
           ),
         ],
       ),
-      // drawer: Drawer(
-      //   elevation: 10.0,
-      //   child: ListView(
-      //     children: <Widget>[
-      //       DrawerHeader(
-      //         decoration: BoxDecoration(color: Colors.grey.shade500),
-      //         child: Row(
-      //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      //           children: <Widget>[
-      //             CircleAvatar(
-      //               backgroundImage: NetworkImage(
-      //                   'https://pixel.nymag.com/imgs/daily/vulture/2017/06/14/14-tom-cruise.w700.h700.jpg'),
-      //               radius: 40.0,
-      //             ),
-      //             Column(
-      //               mainAxisAlignment: MainAxisAlignment.center,
-      //               crossAxisAlignment: CrossAxisAlignment.start,
-      //               children: <Widget>[
-      //                 Text(
-      //                   'Tom Cruise',
-      //                   style: TextStyle(
-      //                       fontWeight: FontWeight.bold,
-      //                       color: Colors.white,
-      //                       fontSize: 25.0),
-      //                 ),
-      //                 SizedBox(height: 10.0),
-      //                 Text(
-      //                   'tomcruise@gmail.com',
-      //                   style: TextStyle(
-      //                       fontWeight: FontWeight.bold,
-      //                       color: Colors.white,
-      //                       fontSize: 14.0),
-      //                 ),
-      //               ],
-      //             )
-      //           ],
-      //         ),
-      //       ),
-      //     ],
-      //   ),
-      // ),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -111,16 +64,15 @@ class ProductScreen extends StatelessWidget {
                   );
                 }
                 if (!snapshot.hasData) {
-                  return Scaffold(
-                    body: Center(
-                      child: CircularProgressIndicator(
-                        backgroundColor: Colors.teal,
-                      ),
+                  return Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.teal,
                     ),
                   );
                 }
 
                 final products = snapshot.data.docs;
+
                 List<ReusableCards> productCards = [];
 
                 for (var product in products) {
@@ -148,15 +100,6 @@ class ProductScreen extends StatelessWidget {
     );
   }
 }
-
-// Column(
-//   children: <Widget>[
-//     Text('List of Products'),
-//     ReusableCards(),
-//     ReusableCards(),
-//     ReusableCards(),
-//   ],
-// ),
 
 // if (snapshot.connectionState == ConnectionState.done) {
 //   return ListView(

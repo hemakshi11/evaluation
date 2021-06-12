@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../user_product_details.dart';
 
 class CartScreen extends StatelessWidget {
   static String id = 'cartScreen';
@@ -19,7 +22,7 @@ class CartScreen extends StatelessWidget {
           Container(
             child: Center(
               child: Text(
-                '6',
+                Provider.of<Users>(context).productCount.toString(),
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -35,15 +38,19 @@ class CartScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: ListView(
-        children: [
-          Container(
-            child: Center(
-              child: Text('hello'),
-            ),
-          ),
-        ],
-      ),
+      body: Consumer<Users>(builder: (context, productDetails, child) {
+        return ListView.builder(
+          itemBuilder: (context, index) {
+            final product = productDetails.products[index];
+            return Container(
+              child: Center(
+                child: Text('${product.name}'),
+              ),
+            );
+          },
+          itemCount: productDetails.productCount,
+        );
+      }),
     );
   }
 }

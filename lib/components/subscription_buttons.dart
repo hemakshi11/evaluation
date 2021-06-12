@@ -5,7 +5,8 @@ import '../screens/cart_screen.dart';
 class SubscriptionButtons extends StatelessWidget {
   final String text;
   var price;
-  SubscriptionButtons({this.text, this.price});
+  final Function onTap;
+  SubscriptionButtons({this.text, this.price, this.onTap});
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -22,9 +23,7 @@ class SubscriptionButtons extends StatelessWidget {
           style: TextStyle(fontSize: 18),
         ),
       ),
-      onTap: () {
-        Navigator.pushNamed(context, CartScreen.id);
-      },
+      onTap: onTap,
     );
   }
 }
