@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "875973085524",
+    "project_id": "evaluation-task-b0a66",
+    "storage_bucket": "evaluation-task-b0a66.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875973085524:android:81f951a4c7ad7e2227a0c1",
+        "android_client_info": {
+          "package_name": "hemakshi.evaluation_task"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "875973085524-j2b8kckdhphg9pbhd26bgspvnda30fri.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBWPjwgcagtueu0IT17Ww9e5buK3pYPXQc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "875973085524-j2b8kckdhphg9pbhd26bgspvnda30fri.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
