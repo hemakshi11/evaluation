@@ -1,11 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:evaluation_task/components/drawerForApp.dart';
 import 'package:evaluation_task/screens/cart_screen.dart';
 import 'package:evaluation_task/components/reusable_cards.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:evaluation_task/user_product_details.dart';
-
 import '../product_data.dart';
 import '../user_product_details.dart';
 
@@ -18,10 +18,6 @@ class ProductScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(Icons.view_headline_sharp),
-          onPressed: () {},
-        ),
         title: Text(
           'Products',
           style: TextStyle(fontWeight: FontWeight.w600, fontSize: 20),
@@ -47,6 +43,7 @@ class ProductScreen extends StatelessWidget {
           ),
         ],
       ),
+      drawer: DrawerForApp(),
       body: Container(
         child: Column(
           children: <Widget>[
@@ -76,15 +73,7 @@ class ProductScreen extends StatelessWidget {
                 List<ReusableCards> productCards = [];
 
                 for (var product in products) {
-                  final image = product.get('image');
-                  final name = product.get('name');
-                  final price = product.get('price');
-
-                  final cards = ReusableCards(
-                    src: image,
-                    name: name,
-                    price: price,
-                  );
+                  final cards = ReusableCards(product: product.data());
                   productCards.add(cards);
                 }
                 return Expanded(

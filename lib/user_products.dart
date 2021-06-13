@@ -1,6 +1,7 @@
 class UserProducts {
-  String src;
+  String image;
   String name;
   var price;
-  UserProducts({this.src, this.name, this.price});
+  String type;
+  UserProducts({this.image, this.name, this.price, this.type});
 }

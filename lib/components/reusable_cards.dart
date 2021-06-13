@@ -4,11 +4,8 @@ import '../constants.dart';
 import 'bottomSheet_popup.dart';
 
 class ReusableCards extends StatelessWidget {
-  final String src;
-  final String name;
-  final price;
-  var productData;
-  ReusableCards({this.src, this.name, this.price, this.productData});
+  final product;
+  ReusableCards({this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -31,20 +28,19 @@ class ReusableCards extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: kContainerCircularBorders,
                   child: Image.network(
-                    '$src',
+                    '${product['image']}',
                     fit: BoxFit.cover,
                   ),
                 )),
             Text(
-              '${name.toUpperCase()}',
+              '${product['name'].toUpperCase()}',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             GestureDetector(
               onTap: () {
                 showModalBottomSheet(
                   context: context,
-                  builder: (context) =>
-                      BottomSheetPage(price: price, src: src, name: name),
+                  builder: (context) => BottomSheetPage(product: product),
                 );
               },
               child: Container(

@@ -6,6 +6,7 @@ const kContainerCircularBorders = BorderRadius.all(Radius.circular(20));
 const kContainerButtonColor = Colors.white12;
 const kTeal = Color(0xff009688);
 
+// const kSnackBar = SnackBar(content: Text('SnackBar'));
 const kTextFieldDecoration = InputDecoration(
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   filled: true,

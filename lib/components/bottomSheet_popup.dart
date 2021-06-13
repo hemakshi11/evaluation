@@ -7,10 +7,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:provider/provider.dart';
 
 class BottomSheetPage extends StatefulWidget {
-  final price;
-  String name;
-  String src;
-  BottomSheetPage({this.price, this.name, this.src});
+  final product;
+  BottomSheetPage({this.product});
+
   @override
   _BottomSheetPageState createState() => _BottomSheetPageState();
 }
@@ -44,18 +43,28 @@ class _BottomSheetPageState extends State<BottomSheetPage> {
             ),
             SubscriptionButtons(
                 text: '12 months',
-                price: widget.price['12months'],
+                price: widget.product['price']['12months'],
                 onTap: () {
+                  // Scaffold.of(context).showSnackBar(
+                  //     SnackBar(content: Text('Product added to the Cart')));
                   Provider.of<Users>(context, listen: false).addProduct(
-                      widget.name, widget.src, widget.price['12months']);
+                      name: widget.product['name'],
+                      image: widget.product['image'],
+                      price: widget.product['price']['12months'],
+                      type: '12months');
+                  Navigator.pop(context);
                 }),
             SizedBox(height: 10),
             SubscriptionButtons(
                 text: '6 months',
-                price: widget.price['6months'],
+                price: widget.product['price']['6months'],
                 onTap: () {
                   Provider.of<Users>(context, listen: false).addProduct(
-                      widget.name, widget.src, widget.price['6months']);
+                      name: widget.product['name'],
+                      image: widget.product['image'],
+                      price: widget.product['price']['6months'],
+                      type: '6months');
+                  Navigator.pop(context);
                 }),
           ],
         ),
