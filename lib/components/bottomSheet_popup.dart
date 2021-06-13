@@ -45,8 +45,18 @@ class _BottomSheetPageState extends State<BottomSheetPage> {
                 text: '12 months',
                 price: widget.product['price']['12months'],
                 onTap: () {
-                  // Scaffold.of(context).showSnackBar(
-                  //     SnackBar(content: Text('Product added to the Cart')));
+                  // Provider.of<Users>(context, listen: false).checkInCart();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        'Product added to the Cart',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      duration: Duration(seconds: 1),
+                      backgroundColor: Colors.black,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      )));
                   Provider.of<Users>(context, listen: false).addProduct(
                       name: widget.product['name'],
                       image: widget.product['image'],
@@ -59,6 +69,18 @@ class _BottomSheetPageState extends State<BottomSheetPage> {
                 text: '6 months',
                 price: widget.product['price']['6months'],
                 onTap: () {
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(
+                        'Product added to the Cart',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      duration: Duration(seconds: 1),
+                      backgroundColor: Colors.black,
+                      behavior: SnackBarBehavior.floating,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      )));
+                  // Provider.of<Users>(context, listen: false).checkInCart();
                   Provider.of<Users>(context, listen: false).addProduct(
                       name: widget.product['name'],
                       image: widget.product['image'],

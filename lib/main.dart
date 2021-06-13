@@ -1,4 +1,5 @@
 import 'package:evaluation_task/screens/cart_screen.dart';
+import 'package:evaluation_task/screens/final_order.dart';
 import 'package:evaluation_task/screens/login_screen.dart';
 import 'package:evaluation_task/screens/product_screen.dart';
 import 'package:evaluation_task/screens/register_screen.dart';
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
           CartScreen.id: (context) => CartScreen(),
           LoginScreen.id: (context) => LoginScreen(),
           RegisterScreen.id: (context) => RegisterScreen(),
-          WelcomeScreen.id: (context) => WelcomeScreen()
+          WelcomeScreen.id: (context) => WelcomeScreen(),
+          FinalOrder.id: (context) => FinalOrder(),
         },
       ),
     );

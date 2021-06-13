@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evaluation_task/components/drawerForApp.dart';
+import 'package:evaluation_task/screens/final_order.dart';
 import 'package:evaluation_task/user_products.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
+import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants.dart';
 import '../user_product_details.dart';
 
@@ -17,9 +18,40 @@ class CartScreen extends StatelessWidget {
         'Product deleted from the cart',
         style: TextStyle(color: Colors.white),
       ),
+      duration: Duration(seconds: 1),
       backgroundColor: Colors.black45,
     );
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Alert(
+            context: context,
+            type: AlertType.none,
+            title: "Check-Out",
+            desc: "Proceed with the current items in your cart?",
+            style: AlertStyle(backgroundColor: Colors.white54),
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "No",
+                  style: TextStyle(color: Colors.black54, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pop(context),
+                color: kContainerColor,
+              ),
+              DialogButton(
+                child: Text(
+                  "Yes",
+                  style: TextStyle(color: Colors.black54, fontSize: 20),
+                ),
+                onPressed: () => Navigator.pushNamed(context, FinalOrder.id),
+                color: kContainerColor,
+              )
+            ],
+          ).show();
+        },
+        child: Icon(Icons.check),
+      ),
       appBar: AppBar(
         title: Text(
           'Cart',
@@ -85,7 +117,7 @@ class CartScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final product = productDetails.products[index];
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: kContainerCircularBorders,
