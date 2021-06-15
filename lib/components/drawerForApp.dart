@@ -6,6 +6,9 @@ import 'package:evaluation_task/user_product_details.dart';
 import 'package:flutter/material.dart';
 
 import 'package:provider/provider.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+
+import '../constants.dart';
 
 class DrawerForApp extends StatelessWidget {
   @override
@@ -77,9 +80,39 @@ class DrawerForApp extends StatelessWidget {
                 ),
                 GestureDetector(
                   onTap: () {
-                    auth.signOut();
-                    Provider.of<Users>(context, listen: false).products.clear();
-                    Navigator.pushNamed(context, WelcomeScreen.id);
+                    Alert(
+                      context: context,
+                      type: AlertType.none,
+                      title: "Sign-Out",
+                      desc: "Do you want to sign-out?",
+                      style: AlertStyle(backgroundColor: Colors.white54),
+                      buttons: [
+                        DialogButton(
+                          child: Text(
+                            "No",
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 20),
+                          ),
+                          onPressed: () => Navigator.pop(context),
+                          color: kContainerColor,
+                        ),
+                        DialogButton(
+                          child: Text(
+                            "Yes",
+                            style:
+                                TextStyle(color: Colors.black54, fontSize: 20),
+                          ),
+                          onPressed: () {
+                            auth.signOut();
+                            Provider.of<Users>(context, listen: false)
+                                .products
+                                .clear();
+                            Navigator.pushNamed(context, WelcomeScreen.id);
+                          },
+                          color: kContainerColor,
+                        )
+                      ],
+                    ).show();
                   },
                   child: Container(
                     child: Padding(

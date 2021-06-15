@@ -2,56 +2,58 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evaluation_task/components/drawerForApp.dart';
 import 'package:evaluation_task/screens/final_order.dart';
 import 'package:evaluation_task/user_products.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import '../constants.dart';
 import '../user_product_details.dart';
 
+FirebaseFirestore _firestore = FirebaseFirestore.instance;
+final snackBar = SnackBar(
+  content: Text(
+    'Product deleted from the cart',
+    style: TextStyle(color: Colors.white),
+  ),
+  duration: Duration(seconds: 1),
+  backgroundColor: Colors.black,
+);
+
 class CartScreen extends StatelessWidget {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   static String id = 'cartScreen';
   @override
   Widget build(BuildContext context) {
-    final snackBar = SnackBar(
-      content: Text(
-        'Product deleted from the cart',
-        style: TextStyle(color: Colors.white),
-      ),
-      duration: Duration(seconds: 1),
-      backgroundColor: Colors.black45,
-    );
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Alert(
-            context: context,
-            type: AlertType.none,
-            title: "Check-Out",
-            desc: "Proceed with the current items in your cart?",
-            style: AlertStyle(backgroundColor: Colors.white54),
-            buttons: [
-              DialogButton(
-                child: Text(
-                  "No",
-                  style: TextStyle(color: Colors.black54, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pop(context),
-                color: kContainerColor,
-              ),
-              DialogButton(
-                child: Text(
-                  "Yes",
-                  style: TextStyle(color: Colors.black54, fontSize: 20),
-                ),
-                onPressed: () => Navigator.pushNamed(context, FinalOrder.id),
-                color: kContainerColor,
-              )
-            ],
-          ).show();
-        },
-        child: Icon(Icons.check),
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Alert(
+      //       context: context,
+      //       type: AlertType.none,
+      //       title: "Check-Out",
+      //       desc: "Proceed with the current items in your cart?",
+      //       style: AlertStyle(backgroundColor: Colors.white54),
+      //       buttons: [
+      //         DialogButton(
+      //           child: Text(
+      //             "No",
+      //             style: TextStyle(color: Colors.black54, fontSize: 20),
+      //           ),
+      //           onPressed: () => Navigator.pop(context),
+      //           color: kContainerColor,
+      //         ),
+      //         DialogButton(
+      //           child: Text(
+      //             "Yes",
+      //             style: TextStyle(color: Colors.black54, fontSize: 20),
+      //           ),
+      //           onPressed: () => Navigator.pushNamed(context, FinalOrder.id),
+      //           color: kContainerColor,
+      //         )
+      //       ],
+      //     ).show();
+      //   },
+      //   child: Icon(Icons.check),
+      // ),
       appBar: AppBar(
         title: Text(
           'Cart',
@@ -79,41 +81,102 @@ class CartScreen extends StatelessWidget {
         ],
       ),
       drawer: DrawerForApp(),
-      body: Consumer<Users>(builder: (context, productDetails, child) {
-        return StreamBuilder<QuerySnapshot>(
-            stream: _firestore
-                .collection('user')
-                .doc(user.uid)
-                .collection('cart')
-                .orderBy('timeStamp')
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Scaffold(
-                  body: Center(
-                    child: Text('ERROR: ${snapshot.error}'),
-                  ),
-                );
-              }
-              if (!snapshot.hasData) {
-                return Center(
-                  child: CircularProgressIndicator(
-                    backgroundColor: Colors.teal,
-                  ),
-                );
-              }
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          ConsumerForCart(),
+          Container(
+            //margin: EdgeInsets.only(top: 10),
+            height: 58,
+            decoration: BoxDecoration(
+              color: Colors.tealAccent.shade700,
 
-              var cartList = snapshot.data.docs;
+              // borderRadius: BorderRadius.only(
+              //     topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+            ),
+            child: FlatButton(
+              onPressed: () {
+                // Alert(
+                //         context: context,
+                //         title: "RFLUTTER",
+                //         desc: "Flutter is awesome.")
+                //     .show();
+                Alert(
+                  context: context,
+                  type: AlertType.success,
+                  title: "Your order is successful",
+                  desc: "${ConsumerForCart()}",
+                  style: AlertStyle(backgroundColor: Colors.white54),
+                  buttons: [
+                    // DialogButton(
+                    //   child: Text(
+                    //     "No",
+                    //     style: TextStyle(color: Colors.black54, fontSize: 20),
+                    //   ),
+                    //   onPressed: () => Navigator.pop(context),
+                    //   color: kContainerColor,
+                    // ),
+                    DialogButton(
+                      child: Text(
+                        "Okay",
+                        style: TextStyle(color: Colors.black54, fontSize: 20),
+                      ),
+                      onPressed: () =>
+                          Navigator.pushNamed(context, FinalOrder.id),
+                      color: kContainerColor,
+                    )
+                  ],
+                ).show();
+              },
+              child: Text('CHECK-OUT', style: TextStyle(fontSize: 20)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
-              for (var i in cartList) {
-                productDetails.addProduct(
-                    name: i.get('name'),
-                    image: i.get('image'),
-                    price: i.get('price'),
-                    type: i.get('type'));
-              }
+class ConsumerForCart extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<Users>(builder: (context, productDetails, child) {
+      return StreamBuilder<QuerySnapshot>(
+          stream: _firestore
+              .collection('user')
+              .doc(user.uid)
+              .collection('cart')
+              // .orderBy('timeStamp')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasError) {
+              return Scaffold(
+                body: Center(
+                  child: Text('ERROR: ${snapshot.error}'),
+                ),
+              );
+            }
+            if (!snapshot.hasData) {
+              return Center(
+                child: CircularProgressIndicator(
+                  backgroundColor: Colors.teal,
+                ),
+              );
+            }
 
-              return ListView.builder(
+            var cartList = snapshot.data.docs;
+
+            for (var i in cartList) {
+              Provider.of<Users>(context).addProduct(
+                  name: i.get('name'),
+                  image: i.get('image'),
+                  price: i.get('price'),
+                  type: i.get('type'));
+            }
+
+            return Expanded(
+              child: ListView.builder(
                 itemBuilder: (context, index) {
                   final product = productDetails.products[index];
                   return Padding(
@@ -178,10 +241,11 @@ class CartScreen extends StatelessWidget {
                     ),
                   );
                 },
+                //shrinkWrap: true,
                 itemCount: productDetails.productCount,
-              );
-            });
-      }),
-    );
+              ),
+            );
+          });
+    });
   }
 }

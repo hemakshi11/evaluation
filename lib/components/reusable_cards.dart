@@ -1,6 +1,8 @@
 import 'package:evaluation_task/user_products.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants.dart';
+import '../user_product_details.dart';
 import 'bottomSheet_popup.dart';
 
 class ReusableCards extends StatelessWidget {
@@ -61,7 +63,7 @@ class ReusableCards extends StatelessWidget {
                         Icons.shopping_cart,
                       ),
                       SizedBox(
-                        width: 10,
+                        width: 15,
                       ),
                       Text(
                         'Add to the cart',
