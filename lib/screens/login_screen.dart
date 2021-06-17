@@ -1,8 +1,13 @@
 import 'package:evaluation_task/screens/product_screen.dart';
+import 'package:evaluation_task/user_product_details.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../constants.dart';
 import '../components/rounded_buttons.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+import '../user_products.dart';
 
 class LoginScreen extends StatefulWidget {
   static String id = 'loginScreen';
@@ -58,20 +63,37 @@ class _LoginScreenState extends State<LoginScreen> {
           SizedBox(
             height: 40,
           ),
-          RoundedButtons(
-            onpressed: () async {
-              try {
-                final user = await _auth.signInWithEmailAndPassword(
-                    email: email, password: password);
-                if (user != null) {
-                  Navigator.pushNamed(context, ProductScreen.id);
+          Consumer<Users>(
+            builder: (context, productDetails, child) => RoundedButtons(
+              onpressed: () async {
+                try {
+                  final user = await _auth.signInWithEmailAndPassword(
+                      email: email, password: password);
+                  if (user != null) {
+                    await FirebaseFirestore.instance
+                        .collection('users')
+                        .doc(user.user.uid)
+                        .collection('cart')
+                        .get()
+                        .then((value) {
+                      value.docs.forEach((element) {
+                        print(element.data());
+                        productDetails.products.add(new UserProducts(
+                            name: element['name'],
+                            price: element['price'],
+                            type: element['type'],
+                            image: element['image']));
+                      });
+                    });
+                    Navigator.pushNamed(context, ProductScreen.id);
+                  }
+                } catch (e) {
+                  print(e);
                 }
-              } catch (e) {
-                print(e);
-              }
-            },
-            title: 'Log In',
-            colour: kTeal,
+              },
+              title: 'Log In',
+              colour: kTeal,
+            ),
           ),
         ],
       ),

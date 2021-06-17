@@ -7,7 +7,9 @@ import 'bottomSheet_popup.dart';
 
 class ReusableCards extends StatelessWidget {
   final product;
-  ReusableCards({this.product});
+  final sub;
+  final bool isInCart;
+  ReusableCards({this.product, this.sub, this.isInCart});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +50,9 @@ class ReusableCards extends StatelessWidget {
               child: Container(
                 margin: EdgeInsets.only(top: 5),
                 decoration: BoxDecoration(
-                  color: Colors.white10,
+                  color: isInCart == true
+                      ? Colors.tealAccent[700]
+                      : Colors.white10,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20)),
@@ -60,13 +64,15 @@ class ReusableCards extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Icon(
-                        Icons.shopping_cart,
+                        isInCart == true ? Icons.check : Icons.shopping_cart,
                       ),
                       SizedBox(
                         width: 15,
                       ),
                       Text(
-                        'Add to the cart',
+                        isInCart == true
+                            ? 'Added to the cart'
+                            : 'Add to the cart',
                         style: TextStyle(fontSize: 15),
                       ),
                     ],

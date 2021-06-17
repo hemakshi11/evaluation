@@ -5,15 +5,27 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'screens/product_screen.dart';
 import 'package:flutter/material.dart';
 
-final auth = FirebaseAuth.instance;
-User user = auth.currentUser;
 bool changeColor = false;
 
 // UserProducts userProducts = UserProducts();
 
 class Users extends ChangeNotifier {
+  final auth = FirebaseAuth.instance;
+  User user = FirebaseAuth.instance.currentUser;
+
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  List<UserProducts> products = [];
+
+  static List firestoreCart = [];
+
+  List products = [];
+  // firestoreCart.map((e) {
+  //         new UserProducts(
+  //             name: e['name'],
+  //             price: e['price'],
+  //             type: e['type'],
+  //             image: e['image']);
+  //       }).toList()
+  //    ;
 
   void addProduct(
       {String name,
@@ -21,11 +33,11 @@ class Users extends ChangeNotifier {
       var price,
       String type,
       BuildContext context}) {
+    print(products);
     final product =
         UserProducts(name: name, image: image, price: price, type: type);
 
-    Iterable<UserProducts> isThere =
-        products.where((i) => i.name.contains(name));
+    Iterable isThere = products.where((i) => i.name.contains(name));
 
     if (isThere.isNotEmpty) {
       print('Product already in cart');
@@ -45,8 +57,8 @@ class Users extends ChangeNotifier {
     } else {
       products.add(product);
       notifyListeners();
-      print(products);
-      print(product.name);
+      // print(products);
+      // print(product.name);
 
       _firestore.collection('users').doc(user.uid).collection('cart').add({
         'name': name,
@@ -79,9 +91,19 @@ class Users extends ChangeNotifier {
   //   if ()
   // }
 
-  void deleteProduct(product) {
-    products.remove(product);
-    changeColor = false;
+  void deleteProduct(name) {
+    var item;
+
+    products.where((element) => element.name == name).forEach((elem) {
+      item = elem;
+    });
+    products.remove(item);
+
+    notifyListeners();
+  }
+
+  void logOff() {
+    products.clear();
     notifyListeners();
   }
 }

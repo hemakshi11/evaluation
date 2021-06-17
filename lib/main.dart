@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:evaluation_task/screens/cart_screen.dart';
 import 'package:evaluation_task/screens/final_order.dart';
 import 'package:evaluation_task/screens/login_screen.dart';
@@ -13,6 +14,7 @@ import 'product_data.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   runApp(MyApp());
 }
 
@@ -30,7 +32,7 @@ class MyApp extends StatelessWidget {
           LoginScreen.id: (context) => LoginScreen(),
           RegisterScreen.id: (context) => RegisterScreen(),
           WelcomeScreen.id: (context) => WelcomeScreen(),
-          FinalOrder.id: (context) => FinalOrder(),
+          // FinalOrder.id: (context) => FinalOrder(),
         },
       ),
     );

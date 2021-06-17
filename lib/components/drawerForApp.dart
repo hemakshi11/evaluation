@@ -2,6 +2,7 @@ import 'package:evaluation_task/screens/cart_screen.dart';
 import 'package:evaluation_task/screens/product_screen.dart';
 import 'package:evaluation_task/screens/welcome_screen.dart';
 import 'package:evaluation_task/user_product_details.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
 
@@ -13,6 +14,8 @@ import '../constants.dart';
 class DrawerForApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final auth = FirebaseAuth.instance;
+    User user = auth.currentUser;
     return Drawer(
       child: SafeArea(
         child: Container(
@@ -102,11 +105,11 @@ class DrawerForApp extends StatelessWidget {
                             style:
                                 TextStyle(color: Colors.black54, fontSize: 20),
                           ),
-                          onPressed: () {
-                            auth.signOut();
-                            Provider.of<Users>(context, listen: false)
-                                .products
-                                .clear();
+                          onPressed: () async {
+                            Provider.of<Users>(context, listen: false).logOff();
+
+                            await auth.signOut();
+
                             Navigator.pushNamed(context, WelcomeScreen.id);
                           },
                           color: kContainerColor,

@@ -29,7 +29,7 @@ class ProductScreen extends StatelessWidget {
           Container(
             child: Center(
               child: Text(
-                Provider.of<Users>(context).productCount.toString(),
+                Provider.of<Users>(context).products.length.toString(),
                 style: TextStyle(fontSize: 20),
               ),
             ),
@@ -49,41 +49,96 @@ class ProductScreen extends StatelessWidget {
       body: Container(
         child: Column(
           children: <Widget>[
-            StreamBuilder<QuerySnapshot>(
-              stream: _firestore
-                  .collection('products')
-                  .orderBy('timeStamp')
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Scaffold(
-                    body: Center(
-                      child: Text('ERROR: ${snapshot.error}'),
+            Consumer<Users>(
+              builder: (context, productDetails, child) =>
+                  StreamBuilder<QuerySnapshot>(
+                stream: _firestore
+                    .collection('products')
+                    .orderBy('timeStamp')
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasError) {
+                    return Scaffold(
+                      body: Center(
+                        child: Text('ERROR: ${snapshot.error}'),
+                      ),
+                    );
+                  }
+                  if (!snapshot.hasData) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: Colors.teal,
+                      ),
+                    );
+                  }
+
+                  final products = snapshot.data.docs;
+
+                  // List<ReusableCards> productCards = [];
+                  List<ReusableCards> cards = [];
+                  List toBeRemoved = [];
+                  //var cartItem;
+                  if (products.isNotEmpty) {
+                    for (var product in products) {
+                      if (productDetails.products.isNotEmpty) {
+                        for (var cartItem in productDetails.products) {
+                          if (cartItem.name == product.get('name')) {
+                            cards.add(
+                              ReusableCards(
+                                  product: product.data(),
+                                  isInCart: true,
+                                  sub: cartItem.type),
+                            );
+                            toBeRemoved.add(product);
+                            break;
+                          }
+                        }
+
+                        // if (cards.contains(ReusableCards(
+                        //     product: product.data(),
+                        //     isInCart: true,
+                        //     sub: cartItem.type),
+                        // ))) {
+                        //   cards.add(
+                        //     ReusableCards(
+                        //         isInCart: false, product: product.data()),
+                        //   );
+                        // }
+                      }
+                      //   else {
+                      //     cards.add(
+                      //       ReusableCards(
+                      //           isInCart: false,
+                      //           //sub: cartItem.type,
+                      //           product: product.data()),
+                      //     );
+                      //   }
+                    }
+                    if (toBeRemoved.isNotEmpty) {
+                      toBeRemoved.forEach((elem) {
+                        products.remove(elem);
+                      });
+                    }
+                    if (products.isNotEmpty) {
+                      products.forEach((element) {
+                        cards.add(
+                          ReusableCards(
+                              isInCart: false,
+                              //sub: cartItem.type,
+                              product: element.data()),
+                        );
+                      });
+                    }
+                  }
+                  return Expanded(
+                    child: ListView(
+                      // itemBuilder: (context, index)=>ReusableCards(product: products[index].data(),)
+                      // itemCount: products.length,
+                      children: cards,
                     ),
                   );
-                }
-                if (!snapshot.hasData) {
-                  return Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.teal,
-                    ),
-                  );
-                }
-
-                final products = snapshot.data.docs;
-
-                List<ReusableCards> productCards = [];
-
-                for (var product in products) {
-                  final cards = ReusableCards(product: product.data());
-                  productCards.add(cards);
-                }
-                return Expanded(
-                  child: ListView(
-                    children: productCards,
-                  ),
-                );
-              },
+                },
+              ),
             ),
           ],
         ),

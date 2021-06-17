@@ -8,6 +8,7 @@ import 'package:provider/provider.dart';
 
 class BottomSheetPage extends StatefulWidget {
   final product;
+  var sub;
   BottomSheetPage({this.product});
 
   @override
